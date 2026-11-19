@@ -38,3 +38,24 @@ As telas atuais exibem dados de demonstração. Antes de conectar uma tela ao Pr
 ## Proteção das tabelas no Supabase
 
 A migração ativa RLS em clientes e veículos e foi aplicada no Supabase conectado. A verificação em modo somente leitura confirmou que o papel usado pelo Prisma mantém acesso às duas tabelas e que anon e authenticated não podem visualizar linhas. Em outros ambientes, confira as migrações pendentes com Prisma migrate status antes de aplicar com Prisma migrate deploy.
+
+## Situação dos testes
+
+- TypeScript e ESLint passaram nas verificações da Etapa 5.
+- Foram verificados o bloqueio de acesso anônimo e a rejeição de credenciais inválidas.
+- Com o Supabase simulado localmente, foram verificados login, cookies de sessão, recarga do dashboard, bloqueio de conta sem perfil e logout.
+- A segurança por linha foi validada no banco conectado. Os papéis anon e authenticated ficaram sem leitura direta das linhas de clientes e veículos. A conexão usada pelo Prisma manteve acesso.
+- O login e o logout completos com uma conta de teste no Supabase conectado ainda precisam ser confirmados no navegador.
+
+## Acesso pela porta privada do Codespaces
+
+1. Execute npm run dev em web e confirme no painel **Portas** que a porta **3000** está encaminhada com visibilidade **Private**.
+2. Abra a porta pelo painel e acesse /login em um navegador autenticado no GitHub com acesso ao Codespace.
+3. Se o endereço encaminhado retornar **HTTP 404**, confirme no terminal do Codespace se a rota local está disponível com o comando abaixo. Uma resposta **200** indica que o servidor está respondendo e que o encaminhamento ou a autenticação do navegador precisam ser verificados.
+4. Pelo VS Code instalado, reabra o mesmo Codespace, encaminhe a porta **3000** com visibilidade privada e acesse o endereço local mostrado em **Portas**, seguido de /login.
+
+~~~bash
+curl -I http://127.0.0.1:3000/login
+~~~
+
+Durante o diagnóstico, a rota local e o túnel autenticado pelo terminal responderam **200**. O endereço encaminhado no Chrome e no Brave retornou **404**. A causa exata no acesso pelo navegador segue em aberto. Consulte a [documentação do GitHub sobre encaminhamento de portas](https://docs.github.com/en/codespaces/developing-in-a-codespace/forwarding-ports-in-your-codespace?tool=vscode).
